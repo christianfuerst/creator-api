@@ -1,6 +1,7 @@
 {
   "account": "INSERT-HIVE-ACCOUNT",
   "key": "INSERT-HIVE-ACTIVE-KEY",
+  "httpPort": 8880,
   "rpc": [
     "https://api.hive.blog",
     "https://api.hivekings.com",
