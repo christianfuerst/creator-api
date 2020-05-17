@@ -21,7 +21,7 @@ router.post("/createAccount", (req, res) => {
   if (!auth) {
     signale.warn(
       new Date(),
-      "- POST request to /createAccount - Refused: Authorization header missing. - Source: " +
+      "- POST request to /api/createAccount - Refused: Authorization header missing. - Source: " +
         req.ip
     );
     res.status(401).send("Authorization header missing.");
@@ -30,14 +30,14 @@ router.post("/createAccount", (req, res) => {
     if (!provider) {
       signale.warn(
         new Date(),
-        "- POST request to /createAccount - Refused: Invalid auth token. - Source: " +
+        "- POST request to /api/createAccount - Refused: Invalid auth token. - Source: " +
           req.ip
       );
       res.status(401).send("Invalid auth token.");
     } else {
       signale.info(
         new Date(),
-        "- GET request to /api/createAccount - Provider: " +
+        "- POST request to /api/createAccount - Provider: " +
           provider.label +
           " - Source: " +
           req.ip
@@ -54,7 +54,7 @@ router.post("/createAccount", (req, res) => {
       ) {
         signale.error(
           new Date(),
-          "- POST request to /createAccount - Error: Body data is invalid or missing. - Source: " +
+          "- POST request to /api/createAccount - Error: Body data is invalid or missing. - Source: " +
             req.ip
         );
         res.status(400).send("Body data is invalid or missing.");
