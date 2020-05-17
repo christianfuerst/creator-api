@@ -1,0 +1,13 @@
+{
+  "account": "INSERT-HIVE-ACCOUNT",
+  "key": "INSERT-HIVE-ACTIVE-KEY",
+  "rpc": [
+    "https://api.hive.blog",
+    "https://api.hivekings.com",
+    "https://anyx.io",
+    "https://api.openhive.network"
+  ],
+  "rcThreshold": 20,
+  "autoClaimDelaySeconds": 60,
+  "auth": [{ "key": "API-KEY", "label": "LABEL-FOR-AUTHORIZED-ENTITY" }]
+}
