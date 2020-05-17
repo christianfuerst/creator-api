@@ -35,7 +35,7 @@ npm install
 }
 ````
 
-For production use it's highly recommended to use a reverse proxy like Nginx and proxy the selected http port to a secure https connection.
+For production it's highly recommended to use a reverse proxy like Nginx and proxy the selected http port to a secure https connection.
 
 ## Run
 ````
