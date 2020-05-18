@@ -11,7 +11,7 @@ git clone https://github.com/christianfuerst/creator-api
 
 - Install frontend dependencies
 ````
-cd hiveonboard
+cd creator-api
 npm install
 ````
 
