@@ -1,5 +1,5 @@
 var express = require("express");
-var dhive = require("@hivechain/dhive");
+var dhive = require("@hiveio/dhive");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 var signale = require("signale");

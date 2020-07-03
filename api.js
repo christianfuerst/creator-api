@@ -1,5 +1,5 @@
 var express = require("express");
-var dhive = require("@hivechain/dhive");
+var dhive = require("@hiveio/dhive");
 var signale = require("signale");
 var _ = require("lodash");
 var config = require("./config.json");
