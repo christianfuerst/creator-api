@@ -46,8 +46,11 @@ node server.js
 Remotly create an account (with default config)
 
 Endpoint: http://localhost:8880/createAccount
+
 Method: POST
+
 Header: `authority:API-KEY`
+
 Body:
 ````
 {
