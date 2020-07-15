@@ -42,6 +42,29 @@ For production it's highly recommended to use a reverse proxy like Nginx and pro
 node server.js
 ````
 
+## How to Use
+Remotly create an account (with default config)
+
+Endpoint: http://localhost:8880/createAccount
+Method: POST
+Header: `authority:API-KEY`
+Body:
+````
+{
+  "name": "account_name",
+  "publicKeys": {
+    "active": "STM6Zh5jRNQt7AhVjWmKpG4FdrrquYEc5RZ9bA6r7WCcjtMF4bqDr",
+    "memo": "STM6Usi2cv13tQSAhgwkjRdYCGo6WDEZ5uLiBaHZuNrFBdNHgJSMF",
+    "owner": "STM863Fp3N7gQV2bk1XJKzpBS8SbMvUs89LqVAVzkSDfkjr6q6HDz",
+    "posting": "STM5ikEMZgWiS36BcTEqMpwhSt6yYAhXPR3xoSqMnD1Wm7a7FsJd8"
+  },
+  "metaData": {
+    "createdBy": "creator_name"
+  }
+}
+````
+
+
 ## Dependencies
 
 - [@hivechain/dhive](https://ghub.io/@hivechain/dhive): Hive blockchain RPC client library
