@@ -31,6 +31,7 @@ npm install
   ],
   "rcThreshold": 20,
   "autoClaimDelaySeconds": 60,
+  "setPostingAccountAuth": false,
   "auth": [{ "key": "API-KEY", "label": "LABEL-FOR-AUTHORIZED-ENTITY" }]
 }
 ````

@@ -69,6 +69,10 @@ router.post("/createAccount", (req, res) => {
 });
 
 function createAccount(name, publicKeys, metaData) {
+  const postingAccountAuth = config.setPostingAccountAuth
+    ? [[config.account, 1]]
+    : [];
+
   const ownerAuth = {
     weight_threshold: 1,
     account_auths: [],
@@ -81,7 +85,7 @@ function createAccount(name, publicKeys, metaData) {
   };
   const postingAuth = {
     weight_threshold: 1,
-    account_auths: [],
+    account_auths: postingAccountAuth,
     key_auths: [[publicKeys.posting, 1]],
   };
 
