@@ -46,6 +46,7 @@ router.post("/createAccount", (req, res) => {
       let name = req.body.name;
       let publicKeys = req.body.publicKeys;
       let metaData = req.body.metaData;
+      let creator = req.body.creator;
 
       if (
         typeof name === "undefined" ||
@@ -60,16 +61,22 @@ router.post("/createAccount", (req, res) => {
         res.status(400).send("Body data is invalid or missing.");
       } else {
         res.setHeader("Content-Type", "application/json");
-        createAccount(name, publicKeys, metaData).then((response) => {
-          res.send(response);
-        });
+        let postingAccountAuth =
+          config.setPostingAccountAuth && typeof creator !== "undefined"
+            ? true
+            : false;
+        createAccount(name, publicKeys, metaData, postingAccountAuth).then(
+          (response) => {
+            res.send(response);
+          }
+        );
       }
     }
   }
 });
 
-function createAccount(name, publicKeys, metaData) {
-  const postingAccountAuth = config.setPostingAccountAuth
+function createAccount(name, publicKeys, metaData, postingAccountAuth) {
+  const postingAccountAuthArray = postingAccountAuth
     ? [[config.account, 1]]
     : [];
 
@@ -85,7 +92,7 @@ function createAccount(name, publicKeys, metaData) {
   };
   const postingAuth = {
     weight_threshold: 1,
-    account_auths: postingAccountAuth,
+    account_auths: postingAccountAuthArray,
     key_auths: [[publicKeys.posting, 1]],
   };
 
