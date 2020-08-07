@@ -18,7 +18,7 @@ app.listen(config.httpPort, function () {
   );
 });
 
-setInterval(claimAccounts, config.autoClaimDelaySeconds * 1000)
+setInterval(claimAccounts, config.autoClaimDelaySeconds * 1000);
 
 async function claimAccounts() {
   let client = new dhive.Client(config.rpc);
@@ -30,6 +30,12 @@ async function claimAccounts() {
     });
 
     let rc = Number(ac.rc_accounts[0].rc_manabar.current_mana);
+
+    if (config.debug) {
+      signale.info("claimAccounts")
+      signale.info("rc:         ", rc);
+      signale.info("rcThreshold:", config.rcThreshold * 1000000000000);
+    }
 
     if (rc > config.rcThreshold * 1000000000000) {
       let op = [
