@@ -20,8 +20,15 @@ npm install
 
 ````
 {
-  "account": "INSERT-HIVE-ACCOUNT",
-  "key": "INSERT-HIVE-ACTIVE-KEY",
+  "accounts": [
+    {
+      "account": "INSERT-HIVE-ACCOUNT",
+      "key": "INSERT-HIVE-ACTIVE-KEY",
+      "rcThreshold": 20,
+      "autoClaimDelaySeconds": 60,
+      "setPostingAccountAuth": false
+    }
+  ],
   "httpPort": 8880,
   "rpc": [
     "https://api.hive.blog",
@@ -29,10 +36,8 @@ npm install
     "https://anyx.io",
     "https://api.openhive.network"
   ],
-  "rcThreshold": 20,
-  "autoClaimDelaySeconds": 60,
-  "setPostingAccountAuth": false,
-  "auth": [{ "key": "API-KEY", "label": "LABEL-FOR-AUTHORIZED-ENTITY" }]
+  "auth": [{ "key": "API-KEY", "label": "LABEL-FOR-AUTHORIZED-ENTITY" }],
+  "debug": false
 }
 ````
 
