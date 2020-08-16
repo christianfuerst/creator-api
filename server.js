@@ -20,12 +20,12 @@ app.listen(config.httpPort, function () {
   );
 });
 
-config.accounts.forEach((element) => {
+for (const account of config.accounts) {
   setInterval(
-    () => claimAccounts(element),
-    element.autoClaimDelaySeconds * 1000
+    () => claimAccounts(account),
+    account.autoClaimDelaySeconds * 1000
   );
-});
+}
 
 async function claimAccounts(account) {
   let privateKey = dhive.PrivateKey.fromString(account.key);
