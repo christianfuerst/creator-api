@@ -7,6 +7,8 @@ var config = require("./config.json");
 
 var app = express();
 
+let client = new dhive.Client(config.rpc);
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -18,30 +20,34 @@ app.listen(config.httpPort, function () {
   );
 });
 
-setInterval(claimAccounts, config.autoClaimDelaySeconds * 1000);
+config.accounts.forEach((element) => {
+  setInterval(
+    () => claimAccounts(element),
+    element.autoClaimDelaySeconds * 1000
+  );
+});
 
-async function claimAccounts() {
-  let client = new dhive.Client(config.rpc);
-  let privateKey = dhive.PrivateKey.fromString(config.key);
+async function claimAccounts(account) {
+  let privateKey = dhive.PrivateKey.fromString(account.key);
 
   try {
     let ac = await client.call("rc_api", "find_rc_accounts", {
-      accounts: [config.account],
+      accounts: [account.account],
     });
 
     let rc = Number(ac.rc_accounts[0].rc_manabar.current_mana);
 
     if (config.debug) {
-      signale.info("claimAccounts")
-      signale.info("rc:         ", rc);
-      signale.info("rcThreshold:", config.rcThreshold * 1000000000000);
+      signale.info("claimAccounts:", account.account);
+      signale.info("rc:           ", rc);
+      signale.info("rcThreshold:  ", account.rcThreshold * 1000000000000);
     }
 
-    if (rc > config.rcThreshold * 1000000000000) {
+    if (rc > account.rcThreshold * 1000000000000) {
       let op = [
         "claim_account",
         {
-          creator: config.account,
+          creator: account.account,
           fee: dhive.Asset.from("0.000 HIVE"),
           extensions: [],
         },
@@ -50,10 +56,15 @@ async function claimAccounts() {
       await client.broadcast.sendOperations([op], privateKey);
       signale.success(
         new Date(),
-        "- OP: create_claimed_account - Success: New account ticket was created."
+        "- OP: " +
+          account.account +
+          " - create_claimed_account - Success: New account ticket was created."
       );
     }
   } catch (error) {
-    signale.error(new Date(), "- OP: claim_account - Error: " + error);
+    signale.error(
+      new Date(),
+      "- OP: " + account.account + " - claim_account - Error: " + error
+    );
   }
 }

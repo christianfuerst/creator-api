@@ -11,7 +11,7 @@ let client = new dhive.Client(config.rpc);
 router.get("/", (req, res) => {
   signale.info(new Date(), "- GET request to /api - Source: " + req.ip);
   res.json({
-    owner_account: config.account,
+    owner_account: config.accounts[0].account,
   });
 });
 
@@ -47,37 +47,60 @@ router.post("/createAccount", (req, res) => {
       let publicKeys = req.body.publicKeys;
       let metaData = req.body.metaData;
       let creator = req.body.creator;
+      let creatorRequested = req.body.creatorRequested;
 
-      if (
-        typeof name === "undefined" ||
-        typeof publicKeys === "undefined" ||
-        typeof metaData === "undefined"
-      ) {
-        signale.error(
+      let account = _.find(config.accounts, { account: creator });
+      if (!account) {
+        signale.warn(
           new Date(),
-          "- POST request to /api/createAccount - Error: Body data is invalid or missing. - Source: " +
+          "- POST request to /api/createAccount - Error: Invalid creator account. - Source: " +
             req.ip
         );
-        res.status(400).send("Body data is invalid or missing.");
+        res.status(400).send("Invalid creator account.");
       } else {
-        res.setHeader("Content-Type", "application/json");
-        let postingAccountAuth =
-          config.setPostingAccountAuth && typeof creator !== "undefined"
-            ? true
-            : false;
-        createAccount(name, publicKeys, metaData, postingAccountAuth).then(
-          (response) => {
+        if (
+          typeof name === "undefined" ||
+          typeof publicKeys === "undefined" ||
+          typeof metaData === "undefined"
+        ) {
+          signale.error(
+            new Date(),
+            "- POST request to /api/createAccount - Error: Body data is invalid or missing. - Source: " +
+              req.ip
+          );
+          res.status(400).send("Body data is invalid or missing.");
+        } else {
+          res.setHeader("Content-Type", "application/json");
+          let postingAccountAuth =
+            account.setPostingAccountAuth &&
+            typeof creator !== "undefined" &&
+            creatorRequested
+              ? true
+              : false;
+          createAccount(
+            name,
+            publicKeys,
+            metaData,
+            postingAccountAuth,
+            account
+          ).then((response) => {
             res.send(response);
-          }
-        );
+          });
+        }
       }
     }
   }
 });
 
-function createAccount(name, publicKeys, metaData, postingAccountAuth) {
+function createAccount(
+  name,
+  publicKeys,
+  metaData,
+  postingAccountAuth,
+  account
+) {
   const postingAccountAuthArray = postingAccountAuth
-    ? [[config.account, 1]]
+    ? [[account.account, 1]]
     : [];
 
   const ownerAuth = {
@@ -96,13 +119,13 @@ function createAccount(name, publicKeys, metaData, postingAccountAuth) {
     key_auths: [[publicKeys.posting, 1]],
   };
 
-  let privateKey = dhive.PrivateKey.fromString(config.key);
+  let privateKey = dhive.PrivateKey.fromString(account.key);
 
   let ops = [];
   const create_op = [
     "create_claimed_account",
     {
-      creator: config.account,
+      creator: account.account,
       new_account_name: name,
       owner: ownerAuth,
       active: activeAuth,
@@ -119,7 +142,9 @@ function createAccount(name, publicKeys, metaData, postingAccountAuth) {
     function (result) {
       signale.success(
         new Date(),
-        "- OP: create_claimed_account - Success: Account " +
+        "- OP: " +
+          account.account +
+          " - create_claimed_account - Success: Account " +
           name +
           " was created."
       );
@@ -129,7 +154,10 @@ function createAccount(name, publicKeys, metaData, postingAccountAuth) {
     function (error) {
       signale.error(
         new Date(),
-        "- OP: create_claimed_account - Error: " + error
+        "- OP: " +
+          account.account +
+          " - create_claimed_account - Error: " +
+          error
       );
       return_status = JSON.stringify({ created: false, name: name });
       return return_status;

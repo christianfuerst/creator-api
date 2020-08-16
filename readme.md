@@ -64,7 +64,9 @@ Body:
   },
   "metaData": {
     "createdBy": "creator_name"
-  }
+  },
+  "creator": "account_name_creator",
+  "creatorRequested": false
 }
 ````
 
