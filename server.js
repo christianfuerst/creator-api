@@ -9,14 +9,25 @@ var app = express();
 
 let client = new dhive.Client(config.rpc);
 
+let listenOptions = {
+  port: config.httpPort ?? 8880,
+  host: config.httpHost ?? "0.0.0.0"
+};
+
+if (config.httpHost === undefined) {
+  signale.warn("httpHost not configured; listening on public IP!");
+}
+
+let listenURI = `http://${listenOptions.host}:${listenOptions.port}`;
+
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/api", require("./api"));
 
-app.listen(config.httpPort, function () {
+app.listen(listenOptions, function () {
   signale.star(
-    "#### Creator-API web server listening on " + config.httpPort + " ####"
+    `#### Creator-API web server listening on ${listenURI} ####`
   );
 });
 
