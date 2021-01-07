@@ -29,6 +29,7 @@ npm install
       "setPostingAccountAuth": false
     }
   ],
+  "httpHost": "localhost",
   "httpPort": 8880,
   "rpc": [
     "https://api.hive.blog",
