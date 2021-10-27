@@ -10,7 +10,6 @@ var app = express();
 let client = new dhive.Client(config.rpc);
 
 let listenOptions = {
-  //x == undefined ? 'default' : x
   port: config.httpPort == undefined ? 8880 : config.httpPort,
   host: config.httpHost == undefined ? "0.0.0.0" : config.httpHost,
 };
