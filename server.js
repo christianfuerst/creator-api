@@ -10,8 +10,9 @@ var app = express();
 let client = new dhive.Client(config.rpc);
 
 let listenOptions = {
-  port: config.httpPort ?? 8880,
-  host: config.httpHost ?? "0.0.0.0"
+  //x == undefined ? 'default' : x
+  port: config.httpPort == undefined ? 8880 : config.httpPort,
+  host: config.httpHost == undefined ? "0.0.0.0" : config.httpHost,
 };
 
 if (config.httpHost === undefined) {
@@ -26,9 +27,7 @@ app.use(bodyParser.json());
 app.use("/api", require("./api"));
 
 app.listen(listenOptions, function () {
-  signale.star(
-    `#### Creator-API web server listening on ${listenURI} ####`
-  );
+  signale.star(`#### Creator-API web server listening on ${listenURI} ####`);
 });
 
 config.accounts.forEach((element) => {
